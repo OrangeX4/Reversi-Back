@@ -134,13 +134,13 @@ def jie_giegie(board: list[list[int]], current: int, newest: list[int], reversal
                                     get_place(i, j, black_turn, direction))
 
     class robot():
-        def __init__(self, figure_set):
+        def __init__(self,figure_set):
             self.analyse_times = 3
             self.figure_set = figure_set
             '分析次数'
-
+        
         @staticmethod
-        def Change_figure_set(figure_set, position):
+        def Change_figure_set(figure_set,position):
             if position[0] == 0:
                 figure_set[1][position[1]] = 40
                 if position[1] == 0:
@@ -158,62 +158,68 @@ def jie_giegie(board: list[list[int]], current: int, newest: list[int], reversal
                     figure_set[7][6] = 40
                     figure_set[6][6] = 60
 
-        def analyse(self, board: Chessboard, black_turn: bool):
+        def analyse(self,board:Chessboard,black_turn:bool):
             board.available_place(black_turn)
             reverse_max = -100000
             better_position = []
-            for i in range(0, 8):
-                for j in range(0, 8):
+            for i in range(0,8):
+                for j in range(0,8):
                     if board.board[i][j].available:
                         count = self.figure_set[i][j]
                         if i % 7 == 0 and j % 7 == 0:
                             new_figure_set = self.figure_set.copy()
-                            self.Change_figure_set(new_figure_set, (i, j))
+                            self.Change_figure_set(new_figure_set,(i,j))
                             for p in board.board[i][j].available:
                                 for posi in p:
-                                    count += 2 * \
-                                        new_figure_set[posi[0]][posi[1]]
+                                    count += 2 * new_figure_set[posi[0]][posi[1]]
                         else:
                             for p in board.board[i][j].available:
                                 for posi in p:
-                                    count += 2 * \
-                                        self.figure_set[posi[0]][posi[1]]
+                                    count += 2 * self.figure_set[posi[0]][posi[1]]
                         if count > reverse_max:
                             reverse_max = count
-                            better_position = (i, j)
-            return better_position, reverse_max
+                            better_position = (i,j)
+            return better_position , reverse_max
 
-        def deep_analyse(self, times, board: Chessboard, black_turn: bool):
+        def deep_analyse(self,times,board:Chessboard,black_turn:bool):
+            board.available_place(black_turn)
+            count = 0
+            for i in range(0,8):
+                for j in range(0,8):
+                    if board.board[i][j].available:
+                        count += 1 
             if times == 0:
                 board.available_place(black_turn)
-                return self.analyse(board, black_turn)
+                return self.analyse(board,black_turn)
+            
+            elif count == 0:
+                return (0,0),0
+            
             else:
                 best_points = -100000
-                best_position = (-1, -1)
-                board.available_place(black_turn)
-                for i in range(0, 8):
-                    for j in range(0, 8):
+                best_position = (-1,-1)
+                for i in range(0,8):
+                    for j in range(0,8):
                         if board.board[i][j].available:
                             board_new = deepcopy(board)
                             if black_turn:
-                                board_new.set_black_piece((i+1, j+1))
+                                board_new.set_black_piece((i+1,j+1))
                             else:
-                                board_new.set_white_piece((i+1, j+1))
-                            new_position, figure = self.deep_analyse(
-                                times-1, board_new, not black_turn)
+                                board_new.set_white_piece((i+1,j+1))
+                            new_position, figure = self.deep_analyse(times-1,board_new,not black_turn)
                             count = self.figure_set[i][j]
                             for p in board.board[i][j].available:
                                 for posi in p:
                                     count += self.figure_set[posi[0]][posi[1]]
                             if count - figure > best_points:
                                 best_points = self.figure_set[i][j] - figure
-                                best_position = (i, j)
-                return best_position, best_points
+                                best_position = (i,j)
+                return best_position,best_points
+            
 
-        def out_put(self, board: Chessboard, black_turn: bool):
-            better_place, figure = self.deep_analyse(
-                self.analyse_times, board, black_turn)
-            return (better_place[0]+1, better_place[1]+1)
+        def out_put(self, board:Chessboard,black_turn:bool):
+            better_place,figure = self.deep_analyse(self.analyse_times,board,black_turn)
+            return (better_place[0]+1,better_place[1]+1)
 
     # ---------------------------------------------------------------
     #                          开始适配                              |
