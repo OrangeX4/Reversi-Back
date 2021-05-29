@@ -1,11 +1,9 @@
 from flask import Flask, request, Response
 import json
-# from flask_cors import CORS
 # 导入 AI 算法
 import ai_list
 
 app = Flask(__name__)
-# CORS(app, supports_credentials=True)
 
 # 跨域支持
 @app.after_request
@@ -15,16 +13,16 @@ def after_request(resp):
     resp.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
     return resp
 
+
+# AI 的 API 支持
 ai_map = [{
     'name': '⑨',
-    'description': '脑袋有些笨笨的.',
+    'description': '琪露诺脑袋有些笨笨的.',
+}, {
+    'name': '杰哥',
+    'description': '我的 AI 还蛮聪明的, 欢迎大家来玩.',
 }]
-ai_map_api = [ai_list.random_ai]
-
-@app.route('/')
-def hello_world():
-    return 'hello world'
-
+ai_map_api = [ai_list.random_ai, ai_list.jie_giegie]
 
 @app.route('/ai_list', methods=['GET'])
 def get_ai_map():
@@ -37,5 +35,9 @@ def ai_api():
     return Response(json.dumps(ai_map_api[aiIndex](board, current, newest, reversal, prompt)), mimetype='application/json')
 
 
+# 联机功能
+
+
+# 挂载
 if __name__ == '__main__':
     app.run(debug=True)
