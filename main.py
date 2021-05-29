@@ -21,8 +21,11 @@ ai_map = [{
 }, {
     'name': '杰哥',
     'description': '我的 AI 还蛮聪明的, 欢迎大家来玩.',
+}, {
+    'name': 'czz',
+    'description': 'czz, yyds!',
 }]
-ai_map_api = [ai_list.random_ai, ai_list.jie_giegie]
+ai_map_api = [ai_list.random_ai, ai_list.jie_giegie, ai_list.czz]
 
 @app.route('/ai_list', methods=['GET'])
 def get_ai_map():
