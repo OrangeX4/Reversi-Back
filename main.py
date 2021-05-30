@@ -38,9 +38,6 @@ def ai_api():
     return Response(json.dumps(ai_map_api[aiIndex](board, current, newest, reversal, prompt)), mimetype='application/json')
 
 
-# 联机功能
-
-
 # 挂载
 if __name__ == '__main__':
     app.run(debug=True)
