@@ -16,16 +16,10 @@ def after_request(resp):
 
 # AI 的 API 支持
 ai_map = [{
-    'name': '⑨',
-    'description': '琪露诺脑袋有些笨笨的.',
-}, {
-    'name': '杰哥',
-    'description': '我的 AI 还蛮聪明的, 欢迎大家来玩.',
-}, {
-    'name': 'czz',
-    'description': 'czz, yyds!',
+    'name': '随机',
+    'description': '随机下棋.',
 }]
-ai_map_api = [ai_list.random_ai, ai_list.jie_giegie, ai_list.czz]
+ai_map_api = [ai_list.random_ai, ai_list.jie_giegie, ai_list.czz, ai_list.away]
 
 @app.route('/ai_list', methods=['GET'])
 def get_ai_map():
@@ -40,4 +34,4 @@ def ai_api():
 
 # 挂载
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, port=7685)
